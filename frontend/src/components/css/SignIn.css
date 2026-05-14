@@ -1,0 +1,254 @@
+/*=========== TABLE OF CONTENTS ===========
+1. Common CSS
+2. Page CSS
+==========================================*/
+
+/*-------------------------------------
+  1. Common CSS
+--------------------------------------*/
+.email {
+  gap: var(--space-xs);
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.inputdata {
+  gap: var(--space-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.termandconditio-span-1 {
+  color: var(--lime_500);
+  font-weight: 700;
+}
+
+/*-------------------------------------
+  2. Page CSS
+--------------------------------------*/
+.sign-in {
+  background-color: var(--gray_50);
+  width: 100%;
+}
+
+.stackgradientme {
+  height: 938px;
+  margin-bottom: 86px;
+  position: relative;
+}
+
+.gradientmesh {
+  height: 938px;
+  width: 94%;
+  object-fit: contain;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  top: 0px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.columnarrowdown {
+  gap: 62px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  top: 0px;
+  height: max-content;
+  margin: auto;
+  @media only screen and (max-width: 550px) {
+    gap: 31px;
+  }
+}
+
+.header {
+  padding-left: 36px;
+  padding-right: 36px;
+  align-self: stretch;
+  display: flex;
+  @media only screen and (max-width: 550px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+.arrowdown_one {
+  height: 22px;
+  margin-top: 64px;
+}
+
+.content {
+  padding-top: var(--space-xs);
+  padding-bottom: var(--space-xs);
+  gap: 184px;
+  background: linear-gradient(180deg, #f9f9f900, #f9f9f9cc, #f9f9f9);
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+  @media only screen and (max-width: 1050px) {
+    width: 100%;
+    gap: 138px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  @media only screen and (max-width: 550px) {
+    gap: 92px;
+  }
+}
+
+.signin {
+  margin-top: 56px;
+  gap: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signinto {
+  text-align: center;
+  align-self: end;
+  line-height: 130%;
+}
+
+.columnemailor {
+  margin-left: 32px;
+  margin-right: 32px;
+  gap: var(--space-lg);
+  display: flex;
+  align-self: stretch;
+  flex-direction: column;
+  @media only screen and (max-width: 1050px) {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}
+
+.email-1 {
+  background-color: var(--gray_50);
+  padding: var(--space-sm) 34px var(--space-sm) var(--space-sm);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--lime_500);
+  @media only screen and (max-width: 550px) {
+    padding-right: 20px;
+  }
+}
+
+.password-1 {
+  gap: var(--space-md);
+  display: flex;
+  align-self: stretch;
+  flex-direction: column;
+}
+
+.password-2 {
+  gap: var(--space-sm);
+  display: flex;
+  background-color: var(--gray_50);
+  justify-content: center;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--lime_500);
+}
+
+.label {
+  flex: 1;
+  display: flex;
+}
+
+.class-____________ {
+  letter-spacing: 0.16px;
+}
+
+.eye_one {
+  height: 24px;
+  width: 24px;
+}
+
+.rememberme {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rowrememberme {
+  gap: var(--space-xs);
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox_one {
+  height: 24px;
+  width: 24px;
+  border-radius: var(--radius-xs);
+  border: 2px solid var(--blue_gray_900);
+}
+
+.forgotpassword {
+  color: var(--lime_500) !important;
+  font-size: 14px !important;
+}
+
+.sign_in {
+  color: var(--gray_50_01);
+  padding-left: 34px;
+  padding-right: 34px;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: var(--lime_500);
+  box-shadow: var(--shadow-xs);
+  align-self: stretch;
+  text-align: center;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  @media only screen and (max-width: 550px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+.signup {
+  margin-left: 66px;
+  margin-right: 66px;
+  gap: var(--space-xs);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  @media only screen and (max-width: 1050px) {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}
+
+.signup-1 {
+  color: var(--lime_500) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+.termandconditio {
+  text-align: center;
+  line-height: 21px;
+}
+
+.termandconditio-span {
+  color: var(--blue_gray_900);
+}
+
+.termandconditio-span-2 {
+  color: var(--blue_gray_900);
+  font-weight: 700;
+}
+
+.termandconditio-span-3 {
+  color: var(--blue_gray_900);
+  font-weight: 400;
+}
