@@ -1,28 +1,32 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../components/css/styles.css';
+import { FaImages, FaMusic, FaVideo } from 'react-icons/fa';
+import './../components/css/components.css';
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="dashboard-container" style={{ padding: '2rem', textAlign: 'center', background: 'var(--bg-dark)', minHeight: '100vh' }}>
-      <h1 style={{ color: 'var(--text-light)', marginBottom: '3rem' }}>Explore Your Talent Hub</h1>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+    <div className="dashboard-container">
+      <h1 style={{ textAlign: 'center', marginBottom: '3rem' }}>Explore TalentHub</h1>
+      <div className="dashboard-grid">
         
-        <div className="module-card" onClick={() => navigate('/photos')} style={{ cursor: 'pointer', background: 'white', padding: '2rem', borderRadius: '15px', color: 'black' }}>
-          <h2 style={{ color: 'var(--accent-photo)' }}>Images</h2>
-          <p>Explore stunning photography and visual arts.</p>
+        <div className="module-card" onClick={() => navigate('/photos')}>
+          <FaImages size={40} color="#6366f1" style={{ marginBottom: '1rem' }} />
+          <h2>Images</h2>
+          <p>Explore stunning photography and visual arts shared by our community.</p>
         </div>
 
-        <div className="module-card" onClick={() => navigate('/music')} style={{ cursor: 'pointer', background: '#181818', padding: '2rem', borderRadius: '15px', color: 'white' }}>
-          <h2 style={{ color: 'var(--accent-audio)' }}>Audios</h2>
-          <p>Discover new sounds and audio experiences.</p>
+        <div className="module-card" onClick={() => navigate('/music')}>
+          <FaMusic size={40} color="#ec4899" style={{ marginBottom: '1rem' }} />
+          <h2>Audios</h2>
+          <p>Discover new sounds, music, and audio experiences.</p>
         </div>
 
-        <div className="module-card" onClick={() => navigate('/videos')} style={{ cursor: 'pointer', background: '#0f0f0f', padding: '2rem', borderRadius: '15px', color: 'white' }}>
-          <h2 style={{ color: 'var(--accent-video)' }}>Videos</h2>
-          <p>Watch and enjoy trending video content.</p>
+        <div className="module-card" onClick={() => navigate('/videos')}>
+          <FaVideo size={40} color="#f59e0b" style={{ marginBottom: '1rem' }} />
+          <h2>Videos</h2>
+          <p>Watch and enjoy trending video content from creators worldwide.</p>
         </div>
 
       </div>

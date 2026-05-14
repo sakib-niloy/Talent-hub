@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AudioCard from '../components/AudioCard';
 import api from '../api';
+import './../components/css/components.css';
 
 const AudioSection = () => {
   const [audios, setAudios] = useState([]);
@@ -115,7 +116,7 @@ const AudioSection = () => {
         </div>
       )}
 
-      <div className="audio-grid">
+      <div className="audio-list">
         {audios.map((audio) => (
           <AudioCard key={audio.id} audio={audio} onDelete={handleAudioDelete} />
         ))}

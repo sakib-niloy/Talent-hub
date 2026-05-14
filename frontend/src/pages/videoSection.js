@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import VideoCard from '../components/VideoCard';
 import api from '../api';
+import './../components/css/components.css';
 
 const VideoSection = () => {
   const [videos, setVideos] = useState([]);
