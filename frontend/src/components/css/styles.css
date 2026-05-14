@@ -1,0 +1,55 @@
+:root {
+  --primary-color: #6366f1;
+  --bg-dark: #0f172a;
+  --text-light: #f8fafc;
+  --accent-photo: #ec4899;
+  --accent-audio: #1db954;
+  --accent-video: #ef4444;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+}
+
+.landing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background: radial-gradient(circle at top right, #312e81, #0f172a);
+}
+
+.hero h1 { font-size: 3rem; margin-bottom: 1rem; }
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s, background 0.2s;
+}
+
+button:hover { transform: translateY(-2px); }
+
+/* Module Theming */
+.photo-section { background: #fff; color: #000; padding: 2rem; }
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+
+.audio-section { background: #121212; color: #fff; padding: 2rem; min-height: 100vh; }
+.spotify-vibe { background: #181818; padding: 1rem; border-radius: 12px; }
+
+.video-section { background: #0f0f0f; color: #fff; padding: 2rem; }
+.youtube-vibe video { width: 100%; border-radius: 12px; }
+
+.admin-delete { background: var(--accent-video); color: white; }
