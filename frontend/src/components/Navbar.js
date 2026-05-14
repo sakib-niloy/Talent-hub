@@ -1,28 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import './css/components.css'; // Add professional styling here
+import { FaHome, FaImages, FaMusic, FaVideo, FaUserCircle, FaSignOutAlt, FaSignInAlt, FaUserPlus, FaMoon, FaSun } from 'react-icons/fa';
+import './css/components.css';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
 
   return (
-    <nav className="navbar" style={{ background: '#000', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#fff', borderBottom: '1px solid #333' }}>
-      <Link to="/" style={{ fontSize: '1.5rem', fontWeight: 'bold', textDecoration: 'none', color: '#fff' }}>TalentHub</Link>
-      <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-        <Link to="/dashboard" style={{ textDecoration: 'none', color: '#ccc' }}>Dashboard</Link>
-        <Link to="/photos" style={{ textDecoration: 'none', color: '#ccc' }}>Images</Link>
-        <Link to="/music" style={{ textDecoration: 'none', color: '#ccc' }}>Audios</Link>
-        <Link to="/videos" style={{ textDecoration: 'none', color: '#ccc' }}>Videos</Link>
+    <nav className="navbar">
+      <Link to="/" className="navbar-brand">
+        <FaHome /> TalentHub
+      </Link>
+      <div className="navbar-links">
+        <Link to="/dashboard" className="navbar-link">Dashboard</Link>
+        <Link to="/photos" className="navbar-link"><FaImages /> Images</Link>
+        <Link to="/music" className="navbar-link"><FaMusic /> Audios</Link>
+        <Link to="/videos" className="navbar-link"><FaVideo /> Videos</Link>
+        
+        <button onClick={() => setIsDark(!isDark)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: 'var(--text-color)' }}>
+          {isDark ? <FaSun /> : <FaMoon />}
+        </button>
+
         {user ? (
           <>
-            <span style={{ fontSize: '0.9rem' }}>{user.name}</span>
-            <button onClick={logout} style={{ background: '#ef4444', color: 'white', padding: '0.5rem 1rem', borderRadius: '5px', border: 'none', cursor: 'pointer' }}>Logout</button>
+            <span className="navbar-link"><FaUserCircle /> {user.name}</span>
+            <button onClick={logout} className="auth-btn"><FaSignOutAlt /> Logout</button>
           </>
         ) : (
           <>
-            <Link to="/signin" style={{ textDecoration: 'none', color: '#fff' }}>Sign In</Link>
-            <Link to="/signup" style={{ background: '#6366f1', padding: '0.5rem 1rem', borderRadius: '5px', textDecoration: 'none', color: '#fff' }}>Sign Up</Link>
+            <Link to="/signin" className="navbar-link"><FaSignInAlt /> Sign In</Link>
+            <Link to="/signup" className="signup-btn"><FaUserPlus /> Sign Up</Link>
           </>
         )}
       </div>

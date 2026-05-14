@@ -3,6 +3,7 @@ const User = require('../models/user');
 
 exports.addComment = async (req, res) => {
   try {
+    console.log('Received comment data:', req.body);
     const { content_type, content_id, comment } = req.body;
     const user_id = req.user.id;
     if (!content_type || !content_id || !comment) {
@@ -14,9 +15,11 @@ exports.addComment = async (req, res) => {
       content_id,
       comment
     });
+    console.log('Comment created successfully:', newComment);
     res.status(201).json({ success: true, comment: newComment });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error('Comment creation error:', error);
+    res.status(500).json({ success: false, error: error.message, details: error.errors });
   }
 };
 
@@ -27,25 +30,14 @@ exports.getComments = async (req, res) => {
       return res.status(400).json({ success: false, error: 'Missing required query params.' });
     }
     
-    // Get comments using correct field name 'commented_at'
     const comments = await Comment.findAll({
       where: { content_type, content_id },
+      include: [{ model: User, as: 'user', attributes: ['id', 'name'] }],
       order: [['commented_at', 'ASC']]
     });
     
-    // Manually get user data for each comment using 'findById' from our User model
-    const commentsWithUsers = await Promise.all(
-      comments.map(async (comment) => {
-        const user = await User.findById(comment.user_id);
-        return {
-          ...comment.toJSON(),
-          user: user ? { id: user.id, name: user.name } : null
-        };
-      })
-    );
-    
-    res.status(200).json({ success: true, comments: commentsWithUsers });
+    res.status(200).json({ success: true, comments });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
-}; 
+};

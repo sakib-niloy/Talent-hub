@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PhotoCard from '../components/PhotoCard';
 import api from '../api';
+import './../components/css/components.css';
 
 const PhotoSection = () => {
   const [photos, setPhotos] = useState([]);
