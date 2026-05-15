@@ -28,12 +28,15 @@ const CommentSection = ({ contentType, contentId, onClose }) => {
 
     const handleComment = async () => {
         if (!user) return alert('Please sign in');
+        const headers = getHeaders();
+        const body = { 
+            content_type: contentType, 
+            content_id: Number(contentId), 
+            comment: newComment 
+        };
+        console.log('Sending comment with headers:', headers, 'and body:', body);
         try {
-            await api.post('/api/comments', { 
-                content_type: contentType, 
-                content_id: Number(contentId), 
-                comment: newComment 
-            }, { headers: getHeaders() });
+            await api.post('/api/comments', body, { headers });
             setNewComment('');
             fetchComments();
         } catch (err) {
