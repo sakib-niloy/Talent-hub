@@ -6,17 +6,22 @@ import './../components/css/components.css';
 const VideoSection = () => {
   const [videos, setVideos] = useState([]);
   const [showUploadForm, setShowUploadForm] = useState(false);
+  const [showTimeline, setShowTimeline] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
 
   useEffect(() => {
     fetchVideos();
-  }, []);
+  }, [showTimeline]);
 
   const fetchVideos = async () => {
     try {
-      const response = await api.get('/api/videos');
+      const endpoint = showTimeline ? '/api/videos/timeline' : '/api/videos';
+      const headers = {};
+      const token = localStorage.getItem('token');
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      const response = await api.get(endpoint, { headers });
       setVideos(response.data.videos || []);
     } catch (error) {
       console.error('Error fetching videos', error);
@@ -57,44 +62,52 @@ const VideoSection = () => {
   };
 
   return (
-    <div className="video-section">
-      <h2>Videos</h2>
+    <div className="section-container">
+      <h2 className="section-title">Videos</h2>
       
-      {/* Upload Button */}
-      <button 
-        onClick={() => setShowUploadForm(!showUploadForm)}
-        style={{ marginBottom: '20px', padding: '10px 20px' }}
-      >
-        {showUploadForm ? 'Cancel Upload' : 'Upload New Video'}
-      </button>
+      <div className="cta-buttons" style={{ marginBottom: '2rem' }}>
+        <button
+          className="auth-btn"
+          onClick={() => setShowTimeline(!showTimeline)}
+        >
+          {showTimeline ? 'Show All Videos' : 'Show My Timeline'}
+        </button>
+        <button
+          className="post-btn"
+          onClick={() => setShowUploadForm(!showUploadForm)}
+        >
+          {showUploadForm ? 'Cancel Upload' : 'Upload New Video'}
+        </button>
+      </div>
 
       {/* Upload Form */}
       {showUploadForm && (
-        <div style={{ marginBottom: '20px', padding: '20px', border: '1px solid #ccc' }}>
+        <div className="upload-form-container">
           <h3>Upload Video</h3>
           <form onSubmit={handleUpload}>
             <input 
               type="text" 
               placeholder="Title" 
+              className="themed-input"
               value={title} 
               onChange={(e) => setTitle(e.target.value)} 
               required
-              style={{ marginBottom: '10px', width: '100%', padding: '5px' }}
             />
             <textarea
               placeholder="Description"
+              className="themed-textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              style={{ marginBottom: '10px', width: '100%', padding: '5px' }}
+              rows="4"
             />
             <input 
               type="file" 
+              className="themed-input"
               onChange={handleFileChange} 
               required
               accept="video/*"
-              style={{ marginBottom: '10px' }}
             />
-            <button type="submit" style={{ padding: '10px 20px' }}>Upload Video</button>
+            <button type="submit" className="post-btn" style={{ width: '100%' }}>Upload Video</button>
           </form>
         </div>
       )}

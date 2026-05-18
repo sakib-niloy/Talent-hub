@@ -11,6 +11,7 @@ const SocialActions = ({ content_type, content_id }) => {
 
   useEffect(() => {
     fetchLikes();
+    checkLikeStatus();
   }, [content_type, content_id]);
 
   const getHeaders = () => {
@@ -27,13 +28,24 @@ const SocialActions = ({ content_type, content_id }) => {
     }
   };
 
+  const checkLikeStatus = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const res = await api.get(`/api/likes/status?content_type=${content_type}&content_id=${content_id}`, { headers: getHeaders() });
+      setIsLiked(res.data.isLiked);
+    } catch (err) {
+      console.error('Failed to check like status');
+    }
+  };
+
   const handleLike = async () => {
     try {
-      await api.post('/api/likes', { content_type, content_id }, { headers: getHeaders() });
-      setIsLiked(true);
+      const res = await api.post('/api/likes', { content_type, content_id }, { headers: getHeaders() });
+      setIsLiked(res.data.isLiked);
       fetchLikes();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to like content');
+      alert(err.response?.data?.error || 'Failed to toggle like');
     }
   };
 

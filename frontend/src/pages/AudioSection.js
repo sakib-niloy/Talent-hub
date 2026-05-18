@@ -69,49 +69,51 @@ const AudioSection = () => {
   };
 
   return (
-    <div className="audio-section">
-      <h2>Music</h2>
-      <button
-        onClick={() => setShowTimeline(!showTimeline)}
-        style={{ marginBottom: '20px', padding: '10px 20px', marginRight: '10px' }}
-      >
-        {showTimeline ? 'Show All Audios (Feed)' : 'Show My Timeline'}
-      </button>
-      {/* Upload Button */}
-      <button
-        onClick={() => setShowUploadForm(!showUploadForm)}
-        style={{ marginBottom: '20px', padding: '10px 20px' }}
-      >
-        {showUploadForm ? 'Cancel Upload' : 'Upload New Audio'}
-      </button>
+    <div className="section-container">
+      <h2 className="section-title">Music</h2>
+      <div className="cta-buttons" style={{ marginBottom: '2rem' }}>
+        <button
+          className="auth-btn"
+          onClick={() => setShowTimeline(!showTimeline)}
+        >
+          {showTimeline ? 'Show All Audios' : 'Show My Timeline'}
+        </button>
+        <button
+          className="post-btn"
+          onClick={() => setShowUploadForm(!showUploadForm)}
+        >
+          {showUploadForm ? 'Cancel Upload' : 'Upload New Audio'}
+        </button>
+      </div>
 
       {/* Upload Form */}
       {showUploadForm && (
-        <div style={{ marginBottom: '20px', padding: '20px', border: '1px solid #ccc' }}>
+        <div className="upload-form-container">
           <h3>Upload Audio</h3>
           <form onSubmit={handleUpload}>
             <input 
               type="text" 
               placeholder="Title" 
+              className="themed-input"
               value={title} 
               onChange={(e) => setTitle(e.target.value)} 
               required
-              style={{ marginBottom: '10px', width: '100%', padding: '5px' }}
             />
             <textarea
               placeholder="Description"
+              className="themed-textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              style={{ marginBottom: '10px', width: '100%', padding: '5px' }}
+              rows="4"
             />
             <input 
               type="file" 
+              className="themed-input"
               onChange={handleFileChange} 
               required
               accept="audio/*"
-              style={{ marginBottom: '10px' }}
             />
-            <button type="submit" style={{ padding: '10px 20px' }}>Upload Audio</button>
+            <button type="submit" className="post-btn" style={{ width: '100%' }}>Upload Audio</button>
           </form>
         </div>
       )}

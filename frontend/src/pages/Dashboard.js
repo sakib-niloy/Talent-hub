@@ -8,7 +8,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <h1 style={{ textAlign: 'center', marginBottom: '3rem' }}>Explore TalentHub</h1>
+      <h1 className="dashboard-title">Explore TalentHub</h1>
       <div className="dashboard-grid">
         
         <div className="module-card" onClick={() => navigate('/photos')}>

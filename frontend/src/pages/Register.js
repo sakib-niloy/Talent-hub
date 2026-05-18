@@ -36,9 +36,9 @@ const Register = () => {
     };
 
     return (
-        <div className="login-container">
+        <div className="section-container">
             <div className="login-box">
-                <h2 className="login-title">Sign Up</h2>
+                <h2 className="section-title" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Sign Up</h2>
                 <p className="login-subtitle">Create your Talent Hub account</p>
                 {error && <p className="error-message">{error}</p>}
                 <form onSubmit={onSubmit}>
