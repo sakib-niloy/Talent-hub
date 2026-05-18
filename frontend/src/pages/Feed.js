@@ -41,26 +41,38 @@ const Feed = () => {
     };
 
     return (
-        <div>
-            <Link to="/upload"><button>Upload</button></Link>
-            <h2>Audio</h2>
-            <div>
-                {audios.map(audio => (
-                    <AudioCard key={audio.id} audio={audio} onDelete={handleAudioDelete} />
-                ))}
+        <div className="section-container">
+            <div className="feed-header" style={{ width: '100%', maxWidth: '1400px' }}>
+                <h2 className="section-title" style={{ margin: 0 }}>Community Feed</h2>
+                <Link to="/upload"><button className="post-btn">Upload Content</button></Link>
             </div>
-            <h2>Videos</h2>
-            <div>
-                {videos.map(video => (
-                    <VideoCard key={video.id} video={video} onDelete={handleVideoDelete} />
-                ))}
-            </div>
-            <h2>Photos</h2>
-            <div>
-                {photos.map(photo => (
-                    <PhotoCard key={photo.id} photo={photo} onDelete={handlePhotoDelete} />
-                ))}
-            </div>
+            
+            <section className="feed-section">
+                <h3>Audio</h3>
+                <div className="audio-list">
+                    {audios.map(audio => (
+                        <AudioCard key={audio.id} audio={audio} onDelete={handleAudioDelete} />
+                    ))}
+                </div>
+            </section>
+
+            <section className="feed-section">
+                <h3>Videos</h3>
+                <div className="video-grid">
+                    {videos.map(video => (
+                        <VideoCard key={video.id} video={video} onDelete={handleVideoDelete} />
+                    ))}
+                </div>
+            </section>
+
+            <section className="feed-section">
+                <h3>Photos</h3>
+                <div className="photo-grid">
+                    {photos.map(photo => (
+                        <PhotoCard key={photo.id} photo={photo} onDelete={handlePhotoDelete} />
+                    ))}
+                </div>
+            </section>
         </div>
     );
 };

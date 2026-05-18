@@ -130,7 +130,7 @@ INSERT INTO `users` (`id`, `email`, `password`, `name`, `created_at`) VALUES
 CREATE TABLE `follows` (
   `id` int(11) NOT NULL,
   `follower_id` int(11) NOT NULL,
-  `following_id` int(11) NOT NULL,
+  `followed_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -186,7 +186,7 @@ ALTER TABLE `audios`
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `photo_id` (`photo_id`);
+  ADD KEY `content_id` (`content_id`);
 
 --
 -- Indexes for table `likes`
@@ -194,7 +194,7 @@ ALTER TABLE `comments`
 ALTER TABLE `likes`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `photo_id` (`photo_id`);
+  ADD KEY `content_id` (`content_id`);
 
 --
 -- Indexes for table `photos`
@@ -273,15 +273,13 @@ ALTER TABLE `audios`
 -- Constraints for table `comments`
 --
 ALTER TABLE `comments`
-  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`photo_id`) REFERENCES `photos` (`id`);
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `likes`
 --
 ALTER TABLE `likes`
-  ADD CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `likes_ibfk_2` FOREIGN KEY (`photo_id`) REFERENCES `photos` (`id`);
+  ADD CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `photos`

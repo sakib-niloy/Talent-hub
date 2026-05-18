@@ -30,9 +30,9 @@ const Login = () => {
     };
 
     return (
-        <div className="login-container">
+        <div className="section-container">
             <div className="login-box">
-                <h2 className="login-title">Sign In</h2>
+                <h2 className="section-title" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Sign In</h2>
                 <p className="login-subtitle">Welcome back to Talent Hub</p>
                 {error && <p className="error-message">{error}</p>}
                 <form onSubmit={onSubmit}>

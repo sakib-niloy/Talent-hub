@@ -31,8 +31,8 @@ Video.hasMany(Comment, { foreignKey: 'content_id', constraints: false, scope: { 
 Like.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
 // Follow associations
-User.belongsToMany(User, { as: 'Followers', through: Follow, foreignKey: 'following_id', otherKey: 'follower_id' });
-User.belongsToMany(User, { as: 'Following', through: Follow, foreignKey: 'follower_id', otherKey: 'following_id' });
+User.belongsToMany(User, { as: 'Followers', through: Follow, foreignKey: 'followed_id', otherKey: 'follower_id' });
+User.belongsToMany(User, { as: 'Following', through: Follow, foreignKey: 'follower_id', otherKey: 'followed_id' });
 
 module.exports = {
   User,

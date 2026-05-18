@@ -44,29 +44,51 @@ const UploadForm = () => {
     };
 
     return (
-        <div>
-            <h1>Upload Content</h1>
-            <form onSubmit={handleSubmit}>
-                <select value={type} onChange={e => setType(e.target.value)}>
-                    <option value="photo">Photo</option>
-                    <option value="audio">Audio</option>
-                    <option value="video">Video</option>
-                </select>
-                <input 
-                    type="text" 
-                    placeholder="Title" 
-                    value={title} 
-                    onChange={(e) => setTitle(e.target.value)} 
-                    required
-                />
-                <textarea
-                    placeholder="Description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                />
-                <input type="file" onChange={handleFileChange} required />
-                <button type="submit">Upload</button>
-            </form>
+        <div className="section-container">
+            <h1 className="section-title">Upload Content</h1>
+            <div className="upload-form-container">
+                <form onSubmit={handleSubmit}>
+                    <label style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', display: 'block' }}>Content Type</label>
+                    <select 
+                        value={type} 
+                        onChange={e => setType(e.target.value)}
+                        className="themed-input"
+                        style={{ cursor: 'pointer' }}
+                    >
+                        <option value="photo">Photo</option>
+                        <option value="audio">Audio</option>
+                        <option value="video">Video</option>
+                    </select>
+                    
+                    <input 
+                        type="text" 
+                        placeholder="Title" 
+                        className="themed-input"
+                        value={title} 
+                        onChange={(e) => setTitle(e.target.value)} 
+                        required
+                    />
+                    
+                    <textarea
+                        placeholder="Description"
+                        className="themed-textarea"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        rows="5"
+                    />
+                    
+                    <input 
+                        type="file" 
+                        className="themed-input"
+                        onChange={handleFileChange} 
+                        required 
+                    />
+                    
+                    <button type="submit" className="post-btn" style={{ width: '100%', marginTop: '1rem' }}>
+                        Start Upload
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

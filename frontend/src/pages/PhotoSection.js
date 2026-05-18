@@ -62,49 +62,52 @@ const PhotoSection = () => {
   };
 
   return (
-    <div className="photo-section">
-      <h2>Photography</h2>
-      <button
-        onClick={() => setShowTimeline(!showTimeline)}
-        style={{ marginBottom: '20px', padding: '10px 20px', marginRight: '10px' }}
-      >
-        {showTimeline ? 'Show All Photos (Feed)' : 'Show My Timeline'}
-      </button>
-      {/* Upload Button */}
-      <button
-        onClick={() => setShowUploadForm(!showUploadForm)}
-        style={{ marginBottom: '20px', padding: '10px 20px' }}
-      >
-        {showUploadForm ? 'Cancel Upload' : 'Upload New Photo'}
-      </button>
+    <div className="section-container">
+      <h2 className="section-title">Photography</h2>
+      
+      <div className="cta-buttons" style={{ marginBottom: '2rem' }}>
+        <button
+          className="auth-btn"
+          onClick={() => setShowTimeline(!showTimeline)}
+        >
+          {showTimeline ? 'Show All Photos' : 'Show My Timeline'}
+        </button>
+        <button
+          className="post-btn"
+          onClick={() => setShowUploadForm(!showUploadForm)}
+        >
+          {showUploadForm ? 'Cancel Upload' : 'Upload New Photo'}
+        </button>
+      </div>
 
       {/* Upload Form */}
       {showUploadForm && (
-        <div style={{ marginBottom: '20px', padding: '20px', border: '1px solid #ccc' }}>
+        <div className="upload-form-container">
           <h3>Upload Photo</h3>
           <form onSubmit={handleUpload}>
             <input
               type="text"
               placeholder="Title"
+              className="themed-input"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              style={{ marginBottom: '10px', width: '100%', padding: '5px' }}
             />
             <textarea
               placeholder="Description"
+              className="themed-textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              style={{ marginBottom: '10px', width: '100%', padding: '5px' }}
+              rows="4"
             />
             <input
               type="file"
+              className="themed-input"
               onChange={handleFileChange}
               required
               accept="image/*"
-              style={{ marginBottom: '10px' }}
             />
-            <button type="submit" style={{ padding: '10px 20px' }}>Upload Photo</button>
+            <button type="submit" className="post-btn" style={{ width: '100%' }}>Upload Photo</button>
           </form>
         </div>
       )}

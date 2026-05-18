@@ -1,55 +1,60 @@
-:root {
-  --primary-color: #6366f1;
-  --bg-dark: #0f172a;
-  --text-light: #f8fafc;
-  --accent-photo: #ec4899;
-  --accent-audio: #1db954;
-  --accent-video: #ef4444;
-}
-
-body {
-  margin: 0;
-  font-family: 'Inter', -apple-system, sans-serif;
-  background-color: var(--bg-dark);
-  color: var(--text-light);
-}
-
 .landing-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   text-align: center;
-  background: radial-gradient(circle at top right, #312e81, #0f172a);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.hero h1 { font-size: 3rem; margin-bottom: 1rem; }
+[data-theme='dark'] .landing-container {
+  background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+}
+
+[data-theme='light'] .landing-container {
+  background: radial-gradient(circle at top right, #e0e7ff, #f8fafc);
+}
+
+.hero h1 { 
+  font-size: 4rem; 
+  margin-bottom: 1.5rem; 
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.hero p {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  margin-bottom: 3rem;
+}
 
 .cta-buttons {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
-button {
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: transform 0.2s, background 0.2s;
+.cta-buttons button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
 }
 
-button:hover { transform: translateY(-2px); }
+.google-btn {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
 
-/* Module Theming */
-.photo-section { background: #fff; color: #000; padding: 2rem; }
-.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+.guest-btn {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
 
-.audio-section { background: #121212; color: #fff; padding: 2rem; min-height: 100vh; }
-.spotify-vibe { background: #181818; padding: 1rem; border-radius: 12px; }
-
-.video-section { background: #0f0f0f; color: #fff; padding: 2rem; }
-.youtube-vibe video { width: 100%; border-radius: 12px; }
-
-.admin-delete { background: var(--accent-video); color: white; }
+.guest-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
