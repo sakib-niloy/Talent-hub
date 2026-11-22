@@ -1,24 +1,25 @@
 import axios from 'axios';
+import { API_URL } from './config';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: API_URL,
 });
 
-// Add a request interceptor
-api.interceptors.request.use(config => {
-  console.log('API Request:', config.method.toUpperCase(), config.url, 'Headers:', config.headers, 'Data:', config.data);
-  return config;
-}, error => {
-  return Promise.reject(error);
-});
-
-// Add a response interceptor
-api.interceptors.response.use(response => {
-  console.log('API Response:', response.status, response.data);
-  return response;
-}, error => {
-  console.error('API Error Response:', error.response ? error.response.status : 'No response', error.response ? error.response.data : error.message);
-  return Promise.reject(error);
-});
+// Development-only diagnostics. Never log headers or request bodies:
+// they contain the bearer token and user passwords.
+if (process.env.NODE_ENV === 'development') {
+  api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      console.error(
+        'API error:',
+        error.config?.method?.toUpperCase(),
+        error.config?.url,
+        error.response ? error.response.status : error.message
+      );
+      return Promise.reject(error);
+    }
+  );
+}
 
 export default api;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 const UploadForm = () => {
     const [title, setTitle] = useState('');
@@ -24,9 +25,9 @@ const UploadForm = () => {
         if (type === 'video') formData.append('video', file);
 
         // Use full backend URL
-        let endpoint = 'http://localhost:5000/api/photos/upload';
-        if (type === 'audio') endpoint = 'http://localhost:5000/api/audios/upload';
-        if (type === 'video') endpoint = 'http://localhost:5000/api/videos/upload';
+        let endpoint = `${API_URL}/api/photos/upload`;
+        if (type === 'audio') endpoint = `${API_URL}/api/audios/upload`;
+        if (type === 'video') endpoint = `${API_URL}/api/videos/upload`;
 
         const headers = {};
         const token = localStorage.getItem('token');

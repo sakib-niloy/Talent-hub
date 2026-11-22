@@ -1,12 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../components/css/styles.css';
+import { API_URL } from '../config';
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:5000/auth/google';
+    window.location.href = `${API_URL}/auth/google`;
   };
 
   return (

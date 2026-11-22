@@ -1,17 +1,15 @@
 const express = require('express');
 const audioController = require('../controllers/audioController');
 const authController = require('../controllers/authController');
-const multer = require('multer');
-const path = require('path');
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/audios/'),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-});
-const upload = multer({ storage });
+const { createUploader } = require('../middleware/upload');
+const { uploadLimiter } = require('../middleware/rateLimit');
+
+// Hardened multer: audio MIME allow-list, size limit, random server-side filenames
+const upload = createUploader('audios');
 
 const router = express.Router();
 
-router.post('/upload', authController.protect, upload.single('audio'), audioController.uploadAudio);
+router.post('/upload', authController.protect, uploadLimiter, upload.single('audio'), audioController.uploadAudio);
 router.get('/', audioController.getAllAudios);
 router.get('/timeline', authController.protect, audioController.getUserAudios);
 router.post('/like/:id', authController.protect, audioController.likeAudio);

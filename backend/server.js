@@ -1,9 +1,13 @@
+const config = require('./config/env'); // must be first: loads + validates environment
+const path = require('path');
 const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
 require('./config/passport');
+const { applySecurity, uploadsHeaders } = require('./middleware/security');
+const { apiLimiter } = require('./middleware/rateLimit');
+const { notFound, errorHandler, sanitizeServerErrors } = require('./middleware/errorHandler');
+const { UPLOAD_ROOT } = require('./middleware/upload');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const audioRoutes = require('./routes/audioRoutes');
@@ -12,61 +16,63 @@ const photoRoutes = require('./routes/photoRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const followRoutes = require('./routes/followRoutes');
 const likeRoutes = require('./routes/likeRoutes');
-const path = require('path');
+const adminRoutes = require('./routes/adminRoutes');
 const sequelize = require('./config/database');
 require('./models/associations'); // Ensure associations are loaded
 
-dotenv.config();
-
 const app = express();
-app.use(express.json());
 
-app.use(session({ secret: process.env.SESSION_SECRET || 'secret', resave: false, saveUninitialized: false }));
+// Security headers, CORS allow-list, body size limits, request IDs
+applySecurity(app);
+app.use(sanitizeServerErrors);
+
+// Session is only used for the Google OAuth handshake.
+// NOTE: default MemoryStore is single-process only; replaced by stateless auth in Phase 2.
+app.use(
+  session({
+    name: 'th.sid',
+    secret: config.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: config.isProduction,
+      sameSite: 'lax',
+      maxAge: 10 * 60 * 1000,
+    },
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
-  credentials: true
-}));
-
 // Routes
-app.use('/auth', authRoutes);  // Routes for sign-up and sign-in
-app.use('/users', userRoutes); // Routes for user profile
+app.use('/auth', authRoutes); // sign-up / sign-in (rate limited + validated in the router)
+app.use('/users', apiLimiter, userRoutes);
 
-// Static file serving with proper CORS handling for both ports
-app.use('/uploads', (req, res, next) => {
-  const origin = req.headers.origin;
-  if (['http://localhost:3000', 'http://localhost:3001'].includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  } else {
-    // Default to 3001 if no origin header (e.g. direct browser access) or other
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
-  }
-  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-}, express.static(path.join(__dirname, 'uploads')));
+// User-uploaded media: served with sandboxing headers, no directory listing, no dotfiles
+app.use(
+  '/uploads',
+  uploadsHeaders,
+  express.static(UPLOAD_ROOT, { index: false, dotfiles: 'deny', fallthrough: false, maxAge: '7d' })
+);
 
+app.use('/api', apiLimiter);
 app.use('/api/audios', audioRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/photos', photoRoutes);
 app.use('/api/comments', commentRoutes);
-const adminRoutes = require('./routes/adminRoutes');
 app.use('/api/follows', followRoutes);
 app.use('/api/likes', likeRoutes);
 app.use('/api/admin', adminRoutes);
 
-sequelize.authenticate()
-  .then(() => {
-    console.log('Sequelize connected to the database.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+app.use(notFound);
+app.use(errorHandler);
 
-// Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+sequelize
+  .authenticate()
+  .then(() => console.log('Sequelize connected to the database.'))
+  .catch((err) => console.error('Unable to connect to the database:', err.message || err.original?.code || err.name));
+
+app.listen(config.PORT, () => {
+  console.log(`Server running on port ${config.PORT} (${config.NODE_ENV})`);
 });

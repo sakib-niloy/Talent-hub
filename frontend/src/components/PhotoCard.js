@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import SocialActions from './SocialActions';
 import CommentSection from './CommentSection';
+import { assetUrl } from '../config';
 import './css/components.css';
 
 const PhotoCard = ({ photo, onDelete }) => {
@@ -9,7 +10,7 @@ const PhotoCard = ({ photo, onDelete }) => {
 
   return (
     <div className="card-container">
-      <img src={`http://localhost:5000${photo.photo_url}`} alt={photo.title} className="card-image" />
+      <img src={assetUrl(photo.photo_url)} alt={photo.title} className="card-image" />
       <div className="card-info">
         <h3>{photo.title}</h3>
         <p>{photo.description}</p>

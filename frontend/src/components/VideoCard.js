@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import SocialActions from './SocialActions';
 import CommentSection from './CommentSection';
+import { assetUrl } from '../config';
 import './css/components.css';
 
 const VideoCard = ({ video, onDelete }) => {
@@ -9,7 +10,7 @@ const VideoCard = ({ video, onDelete }) => {
 
   return (
     <div className="card-container video-card">
-      <video controls src={`http://localhost:5000${video.video_url}`} className="card-video" />
+      <video controls src={assetUrl(video.video_url)} className="card-video" />
       <div className="card-info">
         <h3>{video.title}</h3>
         <p>{video.description}</p>

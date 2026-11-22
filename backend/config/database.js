@@ -1,16 +1,12 @@
 const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
-dotenv.config();
+const config = require('./env');
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    dialect: 'mysql',
-    logging: false, // Set to true for SQL query logs
-  }
-);
+const sequelize = new Sequelize(config.DB_NAME, config.DB_USER, config.DB_PASSWORD, {
+  host: config.DB_HOST,
+  port: config.DB_PORT,
+  dialect: 'mysql',
+  logging: false, // Set to console.log for SQL query logs
+  pool: { max: 10, min: 0, acquire: 30000, idle: 10000 },
+});
 
-module.exports = sequelize; 
+module.exports = sequelize;

@@ -1,17 +1,15 @@
 const express = require('express');
 const videoController = require('../controllers/videoController');
 const authController = require('../controllers/authController');
-const multer = require('multer');
-const path = require('path');
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/videos/'),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-});
-const upload = multer({ storage });
+const { createUploader } = require('../middleware/upload');
+const { uploadLimiter } = require('../middleware/rateLimit');
+
+// Hardened multer: video MIME allow-list, size limit, random server-side filenames
+const upload = createUploader('videos');
 
 const router = express.Router();
 
-router.post('/upload', authController.protect, upload.single('video'), videoController.uploadVideo);
+router.post('/upload', authController.protect, uploadLimiter, upload.single('video'), videoController.uploadVideo);
 router.get('/', videoController.getAllVideos);
 router.get('/timeline', authController.protect, videoController.getUserVideos);
 router.post('/like/:id', authController.protect, videoController.likeVideo);
