@@ -9,9 +9,9 @@ node_modules/
 # User-uploaded media (moves to object storage in Phase 4)
 backend/uploads/
 
-# Database dumps may contain personal data — commit schema only (backend/db/schema.sql)
+# Database dumps may contain personal data — only versioned migrations are committed
 *.sql
-!backend/db/schema.sql
+!backend/drizzle/*.sql
 
 # Build output
 build/
@@ -27,3 +27,6 @@ yarn-error.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Local embedded database (PGlite)
+.data/

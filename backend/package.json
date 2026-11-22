@@ -1,36 +1,59 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "name": "talenthub-api",
+  "version": "2.0.0",
+  "description": "TalentHub REST API (Express 5 + Drizzle/Postgres)",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "audit": "npm audit --omit=dev",
-    "test": "echo \"No tests yet (planned in Phase 2)\" && exit 0"
+    "dev": "tsx watch --env-file-if-exists=.env src/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node --env-file-if-exists=.env dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node --env-file-if-exists=.env dist/db/migrate.js",
+    "make-admin": "tsx --env-file-if-exists=.env scripts/make-admin.ts",
+    "import:legacy": "tsx --env-file-if-exists=.env scripts/import-legacy-dump.ts",
+    "audit": "npm audit --omit=dev"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1175.0",
+    "@aws-sdk/s3-request-presigner": "^3.1175.0",
+    "@electric-sql/pglite": "^0.5.17",
     "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
+    "drizzle-orm": "^0.45.4",
     "express": "^5.3.0",
     "express-rate-limit": "^8.7.5",
-    "express-session": "^1.19.0",
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
-    "multer": "^2.5.0",
-    "mysql2": "^3.24.6",
-    "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0",
-    "sequelize": "^6.37.8",
+    "pg": "^8.23.1",
+    "pino": "^10.4.0",
+    "pino-http": "^11.0.0",
     "zod": "^4.6.7"
   },
   "overrides": {
     "uuid": "^11.1.1"
   },
   "engines": {
-    "node": ">=20.12"
-  }
+    "node": ">=22.12"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
+    "@types/supertest": "^7.2.1",
+    "drizzle-kit": "^0.31.11",
+    "pino-pretty": "^13.2.0",
+    "supertest": "^7.3.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.1"
+  },
+  "private": true,
+  "type": "module"
 }

@@ -1,0 +1,49 @@
+# Render Blueprint: TalentHub API (free tier).
+# New > Blueprint > connect this repo. Fill in the `sync: false` values when prompted.
+services:
+  - type: web
+    name: talenthub-api
+    runtime: node
+    plan: free
+    region: oregon # keep close to your Neon region (e.g. AWS us-west-2)
+    rootDir: backend
+    # Dev dependencies (TypeScript) are needed to build; NODE_ENV=production would otherwise skip them.
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start # runs DB migrations on boot (RUN_MIGRATIONS=true)
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: LOG_LEVEL
+        value: info
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL # Neon *pooled* connection string, ends with ?sslmode=require
+        sync: false
+      - key: FRONTEND_URL # e.g. https://talenthub.vercel.app (no trailing slash)
+        sync: false
+      - key: CORS_ORIGINS # same as FRONTEND_URL (comma-separate extra origins)
+        sync: false
+      - key: TRUST_PROXY # Vercel rewrite -> Render proxy -> app
+        value: "2"
+      - key: STORAGE_DRIVER
+        value: s3
+      - key: S3_ENDPOINT # https://<ACCOUNT_ID>.r2.cloudflarestorage.com
+        sync: false
+      - key: S3_REGION
+        value: auto
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_ACCESS_KEY_ID
+        sync: false
+      - key: S3_SECRET_ACCESS_KEY
+        sync: false
+      - key: S3_PUBLIC_URL # https://pub-<hash>.r2.dev or your custom domain
+        sync: false
+      - key: GOOGLE_CLIENT_ID # optional
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET # optional
+        sync: false
