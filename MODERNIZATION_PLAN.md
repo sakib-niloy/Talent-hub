@@ -1,6 +1,20 @@
 # TalentHub Modernization Plan
 
-> **Status:** PROPOSAL. Nothing in this plan has been done yet. No source code was changed to write it.
+> **Status (2026-11-22):** Phases 1–3 are **executed** on branch `modernization`. Phase 4 has its config and runbook done; go-live needs the account steps in [`DEPLOY.md`](DEPLOY.md).
+>
+> **Decisions taken** (Appendix B): PostgreSQL on Neon (via Drizzle) · own cookie-based auth · Next.js + Tailwind + shadcn · Cloudflare R2 (generic S3 driver, so Supabase Storage works too) · TypeScript everywhere · git history purged locally (force-push pending).
+>
+> **Deviations from the original plan:**
+> - **No monorepo:** kept the `backend/` + `frontend/` folders instead of pnpm workspaces. They deploy independently, so there's less churn.
+> - **Drizzle, not Prisma:** no engine binaries, and the same code runs on Neon (`pg`) and embedded PGlite (local dev and tests, with zero installs).
+> - **One 7-day session cookie, revocable on every request:** instead of access + refresh tokens. The user's status and `token_version` are checked on each request.
+> - **Google OAuth without Passport:** implemented directly against Google's endpoints, so `express-session` is gone.
+> - **API proxied through the frontend domain:** `/api/*` goes through Vercel rewrites, so cookies are first-party.
+> - **Not done yet:**
+>   - The OpenAPI spec is the hand-written `docs/API.md` (no generated spec or typed client yet).
+>   - No Sentry.
+>   - Server-side Open Graph metadata for media and profiles.
+>   - Avatar upload.
 > **Author role:** Principal Engineer / Tech Lead review
 > **Date:** 2026-11-22
 > **Scope:** The whole repo (`backend/`, `frontend/`, `talent_hub.sql`). Based on commit `97987d8` on `main`.
