@@ -45,7 +45,11 @@ export class S3Storage implements StorageProvider {
 
   async createUpload(key: string, opts: { contentType: string; maxBytes: number; expiresInSeconds: number }) {
     const command = new PutObjectCommand({ Bucket: this.opts.bucket, Key: this.check(key), ContentType: opts.contentType });
-    const url = await getSignedUrl(this.client, command, { expiresIn: opts.expiresInSeconds });
+    // Sign Content-Type so the object can't be stored as e.g. text/html under a media ticket.
+    const url = await getSignedUrl(this.client, command, {
+      expiresIn: opts.expiresInSeconds,
+      signableHeaders: new Set(['content-type']),
+    });
     // Size is enforced on /complete (HEAD + delete if too large); stale pending uploads are swept.
     return { url, method: 'PUT' as const, headers: { 'Content-Type': opts.contentType } };
   }

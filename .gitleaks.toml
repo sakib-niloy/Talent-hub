@@ -1,0 +1,10 @@
+# gitleaks config: default rules plus allowlisted test fixtures (fake secrets only).
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Test fixtures and documentation placeholders"
+paths = [
+  '''backend/test/''',
+  '''\.env\.example$''',
+]
