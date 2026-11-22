@@ -1,70 +1,46 @@
-# Getting Started with Create React App
+# TalentHub Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Next.js 16 (App Router, Cache Components) · React 19 · TypeScript strict · Tailwind CSS v4 · shadcn/ui (Radix) · TanStack Query v5 · react-hook-form + zod · next-themes · sonner · motion.
 
-## Available Scripts
+Implements the contract in [`../docs/API.md`](../docs/API.md).
 
-In the project directory, you can run:
+## Develop
 
-### `npm start`
+```bash
+cp .env.example .env.local      # set API_ORIGIN (default http://localhost:5000)
+npm install
+npm run dev                     # http://localhost:3000 (must match the API's FRONTEND_URL / CORS_ORIGINS)
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The browser only ever calls this origin. `next.config.ts` rewrites `/api/*` (and `/uploads/*`) to `API_ORIGIN`, so the `th_session` auth cookie is first-party and no tokens touch JavaScript.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+> **`API_ORIGIN` is read at build time.** Rewrites are compiled into the build, so set it **before** `next build` (on Vercel: Project → Settings → Environment Variables, then redeploy).
 
-### `npm test`
+## Scripts
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server |
+| `npm run build` / `npm start` | Production build / serve |
+| `npm run lint` | ESLint (next/core-web-vitals + TS) |
+| `npm run typecheck` | `next typegen` + `tsc --noEmit` |
 
-### `npm run build`
+## Structure
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+src/app/(marketing)/page.tsx      landing
+src/app/(app)/…                   app shell (left rail, mobile tabs, who-to-follow rail)
+  feed/ explore/ m/[id]/ u/[handle]/ upload/ settings/ admin/
+src/app/(auth)/signin, signup     auth (Google button shown only if /auth/providers says so)
+src/lib/api/                      typed fetch client (RFC 9457 errors, cold-start retry), endpoints, XHR upload
+src/hooks/                        TanStack Query hooks (optimistic likes/follows, infinite feeds)
+src/components/                   media (card, audio player, actions), social, layout, ui (shadcn)
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Deploy (Vercel, free Hobby plan)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Import the repo and set **Root Directory** to `frontend` (framework preset: Next.js).
+2. Set the env var `API_ORIGIN=https://<your-api>.onrender.com`.
+3. Deploy. Then set the API's `FRONTEND_URL` / `CORS_ORIGINS` to the Vercel URL.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Render's free tier sleeps when idle. The client retries gateway errors with backoff and shows a "Waking up the server…" banner instead of failing.
