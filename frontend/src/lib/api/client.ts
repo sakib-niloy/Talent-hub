@@ -32,8 +32,8 @@ function defaultMessage(status: number) {
 
 /** Human-readable message for any thrown value. */
 export function errorMessage(err: unknown): string {
-  if (err instanceof ApiError) return err.detail;
-  if (err instanceof Error && err.message) return err.message;
+  if (err instanceof ApiError && typeof err.detail === "string") return err.detail;
+  if (err instanceof Error && typeof err.message === "string" && err.message) return err.message;
   return "Something went wrong.";
 }
 
@@ -99,17 +99,41 @@ function shouldRetry(method: string, res: Response | null) {
   return false;
 }
 
+const UNREACHABLE = "Can't reach the TalentHub server right now. Please try again in a minute.";
+
+const str = (v: unknown): string | undefined => (typeof v === "string" && v.trim() ? v : undefined);
+
+/**
+ * Normalise any error body into ProblemDetails with *string* messages only.
+ * Only bodies from our API (problem+json) are trusted for field errors; anything else
+ * (e.g. a hosting/proxy error page like Vercel's `{"error":{"code","message"}}`) is
+ * reduced to a safe, human-readable message so it can never be rendered as an object.
+ */
 async function parseProblem(res: Response): Promise<ProblemDetails> {
+  // The proxy couldn't reach the API (misconfigured or unreachable origin).
+  if (res.headers.get("x-vercel-error")) return { status: 0, detail: UNREACHABLE };
+  let body: unknown;
   try {
-    const body = (await res.json()) as Partial<ProblemDetails> & { error?: string };
-    return {
-      ...body,
-      status: res.status,
-      detail: body.detail ?? body.error,
-    };
+    body = await res.json();
   } catch {
     return { status: res.status };
   }
+  if (!body || typeof body !== "object") return { status: res.status };
+  const b = body as Record<string, unknown>;
+  const nestedError = b.error && typeof b.error === "object" ? (b.error as Record<string, unknown>) : undefined;
+  const errors = isProblem(res) && Array.isArray(b.errors)
+    ? (b.errors as unknown[])
+        .filter((e): e is { path: unknown; message: unknown } => !!e && typeof e === "object")
+        .map((e) => ({ path: String(e.path ?? ""), message: String(e.message ?? "") }))
+    : undefined;
+  return {
+    type: str(b.type),
+    title: str(b.title),
+    status: res.status,
+    detail: str(b.detail) ?? str(b.error) ?? str(nestedError?.message),
+    requestId: str(b.requestId),
+    errors,
+  };
 }
 
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<Envelope<T>> {
@@ -143,7 +167,13 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
       if (res && res.ok) {
         if (res.status === 204) return { data: undefined as T };
         const text = await res.text();
-        return (text ? JSON.parse(text) : { data: undefined }) as Envelope<T>;
+        if (!text) return { data: undefined as T };
+        try {
+          return JSON.parse(text) as Envelope<T>;
+        } catch {
+          // A 200 that isn't JSON means something other than the API answered (bad proxy target).
+          throw new ApiError({ status: 0, detail: UNREACHABLE });
+        }
       }
 
       if (shouldRetry(method, res) && attempt < RETRY_DELAYS_MS.length) {
